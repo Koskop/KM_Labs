@@ -38,8 +38,11 @@ private:
     double lenth = 0;
     int number_of_amplifier = 0;
     double fractionr_of_amplifier = 0;
+    double lenth_track_amplifier = 0;
 
     void calculate();
+    void clear_memory();
+    void read_entered_data_for_build_scheme();
 
 };
 

@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QIntValidator* validator_number_of_amplifier =  new QIntValidator( 0, 9);
     ui->entered_number_of_amplifier->setValidator(validator_number_of_amplifier);
 
-    QDoubleValidator* validator_fractionr_of_amplifier =  new QDoubleValidator( 0, 1, 2 );
+    QDoubleValidator* validator_fractionr_of_amplifier =  new QDoubleValidator( 0.00, 1.00, 2 );
     validator_fractionr_of_amplifier->setNotation(QDoubleValidator::StandardNotation);
     ui->entered_fractionr_of_amplifier->setValidator(validator_fractionr_of_amplifier);
 
@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->entered_number_of_amplifier->setText("3");
     ui->entered_fractionr_of_amplifier->setText("0");
     ui->resault->setReadOnly(true);
+    ui->draw_scheme_2->hide();
 
 }
 
@@ -35,15 +36,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_draw_scheme_clicked()
 {
-    for(int i = 0; i < this->labels.size(); i++){
-        labels.at(i)->clear();
-    }
-    for(int i = 0; i < this->lines.size(); i++){
-        lines.at(i)->clear();
-    }
-    this->lenth = ui->entered_lenth->text().toDouble();
-    this->number_of_amplifier = ui->entered_number_of_amplifier->text().toInt();
-    this->fractionr_of_amplifier = ui->entered_fractionr_of_amplifier->text().toDouble();
+    this->clear_memory();
+
+    this->read_entered_data_for_build_scheme();
 
     QDoubleValidator* validator_double =  new QDoubleValidator( -1000.0, 1000.0, 2 );
     validator_double->setNotation(QDoubleValidator::StandardNotation);
@@ -157,25 +152,83 @@ void MainWindow::on_draw_scheme_clicked()
             }
         }
     }
+    ui->draw_scheme_2->show();
     return;
 }
 
 void MainWindow::on_draw_scheme_2_clicked()
 {
+    this->read_entered_data_for_build_scheme();
     this->calculate();
     return;
 }
 
 void MainWindow::calculate(){
     ui->resault->clear();
+
+    this->lenth_track_amplifier = this->lenth/(this->number_of_amplifier + 1);
+
     QString tmpstr = "Загальна довжина лінії СП: " + QString::number(this->lenth) + " Кілометрів" + "\n"
             + "Кількість підсилюючих ділянок: " + QString::number(this->number_of_amplifier + 1) + "\n"
-            + "Довжина ланки між підсилювачами: " + QString::number(this->lenth/(this->number_of_amplifier + 1)) + " Кілометрів" + "\n";
-
+            + "Кількість активних підсилюючих ділянок: " + QString::number((int)(this->number_of_amplifier * this->fractionr_of_amplifier)) + "\n"
+            + "Довжина ланки між підсилювачами: " + QString::number(this->lenth_track_amplifier) + " Кілометрів" + "\n";
 
     for(int i = 0; i < (this->number_of_amplifier + 1); i++){
-        tmpstr += "Втрати ділянки " + QString::number(i)+ ": " + QString::number(this->label_amplifier.at(i)->text().toDouble() * (this->lenth/(this->number_of_amplifier + 1))) + "\n";
+        QString tmp = this->line_attenuation_factor.at(i)->text();
+        if(tmp.contains(',')){
+            tmp[tmp.indexOf(',')] = '.';
+        }
+        double tmp2 = tmp.toDouble() * this->lenth_track_amplifier;
+        tmp.clear();
+        tmp = this->line_amplifier.at(i)->text();
+        if(tmp.contains(',')){
+            tmp[tmp.indexOf(',')] = '.';
+        }
+        double tmp3 = tmp.toDouble() - tmp2;
+        tmpstr += "Втрати ділянки " + QString::number(i) + ": " + QString::number(tmp2, 'd', 3) + "\n";
+        tmpstr += "Рівень сигналу після проходження ділянки " + QString::number(i)+ ": " + QString::number(tmp3, 'd', 3) + "\n";
     }
     ui->resault->setText(tmpstr);
+    return;
+}
+
+
+void MainWindow::clear_memory(){
+    for(auto i : this->labels) delete i;
+    this->labels.clear();
+
+    for(auto i : this->lines) delete i;
+    this->lines.clear();
+
+    for(auto i : this->label_amplifier) delete i;
+    this->label_amplifier.clear();
+
+    for(auto i : this->label_attenuation_factor) delete i;
+    this->label_attenuation_factor.clear();
+
+    for(auto i : this->line_amplifier) delete i;
+    this->line_amplifier.clear();
+
+    for(auto i : this->line_attenuation_factor) delete i;
+    this->line_attenuation_factor.clear();
+
+    return;
+}
+
+void MainWindow::read_entered_data_for_build_scheme(){
+    QString tmp = ui->entered_lenth->text();
+    if(tmp.contains(',')){
+        tmp[tmp.indexOf(',')] = '.';
+    }
+    this->lenth = tmp.toDouble();
+    tmp.clear();
+
+    this->number_of_amplifier = ui->entered_number_of_amplifier->text().toInt();
+
+    tmp = ui->entered_fractionr_of_amplifier->text();
+    if(tmp.contains(',')){
+        tmp[tmp.indexOf(',')] = '.';
+    }
+    this->fractionr_of_amplifier = tmp.toDouble();
     return;
 }
