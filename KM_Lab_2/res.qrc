@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/aip_x12.png</file>
+        <file>res/aip_x3.png</file>
+        <file>res/go_x12.png</file>
+        <file>res/go_x3.png</file>
+        <file>res/line_horizontal.png</file>
+        <file>res/line_vertical.png</file>
+        <file>res/long_line.png</file>
+        <file>res/as_x3.png</file>
+        <file>res/oalp_x3.png</file>
+    </qresource>
+</RCC>
