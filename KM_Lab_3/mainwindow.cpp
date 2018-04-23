@@ -157,6 +157,13 @@ void MainWindow::on_pushButton_clicked() //draw element
                 }
 
                 this->rl << new QLabel(ui->scrollAreaWidgetContents);
+                this->rl.last()->setText("ПГ"+QString::number(i+1));
+                this->rl.last()->move(200, 300 + nl*i);
+                this->rl.last()->show();
+                this->rl_coords_Y << this->rl.last()->geometry().y();
+                this->rl_coords_X << this->rl.last()->geometry().x();
+
+                this->rl << new QLabel(ui->scrollAreaWidgetContents);
                 this->rl.last()->setText("0,3");
                 this->rl.last()->move(10, 50+55+75*j+nl*i);
                 this->rl.last()->show();
@@ -248,7 +255,6 @@ void MainWindow::on_pushButton_clicked() //draw element
                     this->lines << new QLabel(ui->scrollAreaWidgetContents);
                     this->lines.last()->setPixmap(tmp);
                     this->lines.last()->move(250+100*j, 950 + nl*i - tmp.height());
-                    //                    this->lines.last()->setGeometry(250+100*j, 250 + 200*i/* - tmp.height()*/, tmp.width(), tmp.height());
                     this->lines.last()->show();
                     this->lines_coords_Y << this->lines.last()->geometry().y();
                     this->lines_coords_X << this->lines.last()->geometry().x();
@@ -266,6 +272,13 @@ void MainWindow::on_pushButton_clicked() //draw element
                 }
 
                 this->rl << new QLabel(ui->scrollAreaWidgetContents);
+                this->rl.last()->setText("ПГ "+QString::number(i+1));
+                this->rl.last()->move(200, 975 + nl*i);
+                this->rl.last()->show();
+                this->rl_coords_Y << this->rl.last()->geometry().y();
+                this->rl_coords_X << this->rl.last()->geometry().x();
+
+                this->rl << new QLabel(ui->scrollAreaWidgetContents);
                 this->rl.last()->setText("0,3");
                 this->rl.last()->move(10, 50+55+75*j+nl*i);
                 this->rl.last()->show();
@@ -279,27 +292,98 @@ void MainWindow::on_pushButton_clicked() //draw element
                 this->rl_coords_X << this->rl.last()->geometry().x();
 
                 this->rl << new QLabel(ui->scrollAreaWidgetContents);
-                this->rl.last()->setText(QString::number(12+4*j));
+                this->rl.last()->setText(QString::number(108-4*j));
                 this->rl.last()->move(130, 50+25+75*j+nl*i);
                 this->rl.last()->show();
                 this->rl_coords_Y << this->rl.last()->geometry().y();
                 this->rl_coords_X << this->rl.last()->geometry().x();
 
                 this->rl << new QLabel(ui->scrollAreaWidgetContents);
-                this->rl.last()->setText(QString::number(20.3-4*j));
+                this->rl.last()->setText(QString::number(104.3-4*j));
                 this->rl.last()->move(250+100*j, 1000 + nl*i);
                 this->rl.last()->show();
                 this->rl_coords_Y << this->rl.last()->geometry().y();
                 this->rl_coords_X << this->rl.last()->geometry().x();
                 this->rl << new QLabel(ui->scrollAreaWidgetContents);
-                this->rl.last()->setText(QString::number(23.4-4*j));
+                this->rl.last()->setText(QString::number(107.4-4*j));
                 this->rl.last()->move(325+100*j, 1000 + nl*i);
+                this->rl.last()->show();
+                this->rl_coords_Y << this->rl.last()->geometry().y();
+                this->rl_coords_X << this->rl.last()->geometry().x();
+            }
+
+            if((i+1)%5 == 0){ // draw VG
+                for(int ij = 0; ij < 5; ij++){
+                    if(1){
+                        QPixmap tmp(100,50); // ширина, висота
+                        tmp.fill(QColor(0,0,0,0));
+                        QPainter painter(&tmp);
+                        QPen pen(QBrush (QColor(230,30,116), Qt::SolidPattern), 5);
+                        painter.setPen(pen);
+                        QFont f("Myriad Pro", 12);
+                        f.setBold(true);
+                        painter.setFont(f);
+                        painter.drawText((int)tmp.size().width()/1.7, (int)tmp.size().height()-7, QString::number(5-ij+5*(((i+1)/5)-1)));
+                        pen.setColor(Qt::black);
+                        painter.setPen(pen);
+                        painter.drawLine(0, tmp.size().height()-2.5, tmp.size().width(), 0);
+                        painter.drawLine(tmp.size().width()-2.5, 5, tmp.size().width()-2.5, tmp.size().height());
+                        painter.drawLine(0, tmp.size().height()-2.5, tmp.size().width()-2.5, tmp.size().height()-2.5);
+
+                        this->horyzontal_triangle << new QLabel(ui->scrollAreaWidgetContents);
+                        this->horyzontal_triangle.last()->setPixmap(tmp);
+                        this->horyzontal_triangle.last()->move(1600+100*ij, 5050 + 5000*(((i+1)/5)-1));
+                        this->horyzontal_triangle.last()->show();
+                        this->horyzontal_triangle_coords_Y << this->horyzontal_triangle.last()->geometry().y();
+                        this->horyzontal_triangle_coords_X << this->horyzontal_triangle.last()->geometry().x();
+                    }
+                    if(1){ //lines vertical
+                        QPixmap tmp(5,30+75*j); // ширина, висота
+                        tmp.fill(Qt::black);
+
+                        this->lines << new QLabel(ui->scrollAreaWidgetContents);
+                        this->lines.last()->setPixmap(tmp);
+                        this->lines.last()->move(250+100*j, 950 + nl*i - tmp.height());
+                        this->lines.last()->show();
+                        this->lines_coords_Y << this->lines.last()->geometry().y();
+                        this->lines_coords_X << this->lines.last()->geometry().x();
+                    }
+                    if(1){ //lines horyzontal
+                        QPixmap tmp(140+100*j,5); // ширина, висота
+                        tmp.fill(Qt::black);
+
+                        this->lines << new QLabel(ui->scrollAreaWidgetContents);
+                        this->lines.last()->setPixmap(tmp);
+                        this->lines.last()->move(250+100*j - tmp.width(), 945 + nl*i-(25+75*j));
+                        this->lines.last()->show();
+                        this->lines_coords_Y << this->lines.last()->geometry().y();
+                        this->lines_coords_X << this->lines.last()->geometry().x();
+                    }
+                }
+                this->rl << new QLabel(ui->scrollAreaWidgetContents);
+                this->rl.last()->setText(QString::number(540.3-4*ij));
+                this->rl.last()->move(1600+100*ij, 5100 + 5000*(((i+1)/5)-1));
+                this->rl.last()->show();
+                this->rl_coords_Y << this->rl.last()->geometry().y();
+                this->rl_coords_X << this->rl.last()->geometry().x();
+                this->rl << new QLabel(ui->scrollAreaWidgetContents);
+                this->rl.last()->setText(QString::number(551.4-4*ij));
+                this->rl.last()->move(1665+100*ij, 5100 + 5000*(((i+1)/5)-1));
+                this->rl.last()->show();
+                this->rl_coords_Y << this->rl.last()->geometry().y();
+                this->rl_coords_X << this->rl.last()->geometry().x();
+
+                this->rl << new QLabel(ui->scrollAreaWidgetContents);
+                this->rl.last()->setText("ВГ "+QString::number((i+1)/5));
+                this->rl.last()->move(1575, 5050 + 5000*(((i+1)/5)-1));
                 this->rl.last()->show();
                 this->rl_coords_Y << this->rl.last()->geometry().y();
                 this->rl_coords_X << this->rl.last()->geometry().x();
             }
         }
     }
+
+    ui->label_2->setText(QString::number(horyzontal_triangle.last()->geometry().bottom()));
     this->setVerticalScrollBarRange();
     this->setHorizontalScrollBarRange();
 }
@@ -307,8 +391,8 @@ void MainWindow::on_pushButton_clicked() //draw element
 void MainWindow::setVerticalScrollBarRange()
 {
     if(!this->vertical_triangle_coords_Y.isEmpty())
-        if(this->vertical_triangle_coords_Y.last() > 500)
-            ui->verticalScrollBar->setRange(0,this->vertical_triangle_coords_Y.last() - 500);
+        if(this->vertical_triangle_coords_Y.last() > 300)
+            ui->verticalScrollBar->setRange(0,this->vertical_triangle_coords_Y.last() - 300);
         else
             ui->verticalScrollBar->setRange(0,0);
     else
@@ -318,8 +402,8 @@ void MainWindow::setVerticalScrollBarRange()
 void MainWindow::setHorizontalScrollBarRange()
 {
     if(!this->horyzontal_triangle_coords_X.isEmpty())
-        if(this->horyzontal_triangle_coords_X.last() > 500)
-            ui->horizontalScrollBar->setRange(0,this->horyzontal_triangle_coords_X.last()- 500);
+        if(this->horyzontal_triangle_coords_X.last() > 300)
+            ui->horizontalScrollBar->setRange(0,this->horyzontal_triangle_coords_X.last()- 300);
         else
             ui->horizontalScrollBar->setRange(0,0);
     else
