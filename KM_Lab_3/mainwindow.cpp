@@ -464,8 +464,6 @@ void MainWindow::on_pushButton_clicked() //draw element
             }
         }
     }
-
-    ui->label_2->setText(QString::number(horyzontal_triangle.last()->geometry().bottom()));
     this->setVerticalScrollBarRange();
     this->setHorizontalScrollBarRange();
 }
